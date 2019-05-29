@@ -75,6 +75,7 @@ class PricingSummaryComponent extends PolymerElement {
         #discount span{
           background-color: #fcf5bf;
           font-style: italic;
+          color: #3dbd51;
         }
       </style>
       <section>
