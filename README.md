@@ -23,6 +23,7 @@ The webcomponents-loader.js is a Polymer [requirement](https://polymer-library.p
  - apply-discount
  - pricing-data
  - period ("yearly" | "monthly")
+ - display-count
 
 # Demo
 

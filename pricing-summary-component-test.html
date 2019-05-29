@@ -27,6 +27,84 @@
     </script>
     <script>
       describe("pricing-summary-component", ()=>{
+        const pricingData = [
+          {
+            "name": "Unused three year plan",
+            "period": 3,
+            "period_unit": "year",
+            "currency_code": "CAD",
+            "tiers": [
+              {
+                "starting_unit": 12,
+                "price": 20790,
+                "object": "tier"
+              },
+            ]
+          },
+          {
+            "name": "Digital Displays Annual Plan",
+            "period": 1,
+            "period_unit": "year",
+            "currency_code": "USD",
+            "tiers": [
+              {
+                "starting_unit": 12,
+                "price": 7700,
+                "object": "tier"
+              },
+              {
+                "starting_unit": 4,
+                "ending_unit": 11,
+                "price": 8800,
+                "object": "tier"
+              },
+              {
+                "starting_unit": 2,
+                "ending_unit": 3,
+                "price": 9900,
+                "object": "tier"
+              },
+              {
+                "starting_unit": 1,
+                "ending_unit": 1,
+                "price": 11000,
+                "object": "tier"
+              }
+            ]
+          },
+          {
+            "name": "Digital Displays Monthly Plan",
+            "period": 1,
+            "period_unit": "month",
+            "currency_code": "USD",
+            "tiers": [
+              {
+                "starting_unit": 1,
+                "ending_unit": 1,
+                "price": 1000,
+                "object": "tier"
+              },
+              {
+                "starting_unit": 2,
+                "ending_unit": 3,
+                "price": 900,
+                "object": "tier"
+              },
+              {
+                "starting_unit": 4,
+                "ending_unit": 11,
+                "price": 800,
+                "object": "tier"
+              },
+              {
+                "starting_unit": 12,
+                "price": 700,
+                "object": "tier"
+              }
+            ]
+          }
+        ];
+
         beforeEach(()=>{
           document.getElementById("component-container")
           .appendChild(document.createElement("pricing-summary-component"));
@@ -42,113 +120,52 @@
           chai.assert(document.querySelector("pricing-summary-component"));
         });
 
-        it("does not show display prompt by default", ()=>{
+        it("does not show industry discount when apply-discount attribute is missing", ()=>{
           const hidden =
             document.querySelector("pricing-summary-component")
-            .shadowRoot.querySelector("#displayCountSection").hasAttribute("hidden");
+            .shadowRoot.querySelector("#discount").hasAttribute("hidden");
 
           chai.assert(hidden);
         });
 
-        it("shows display prompt if attribute is set to true", ()=>{
+        it("shows industry discount section if apply-discount attribute is present", ()=>{
           document.querySelector("pricing-summary-component")
-          .setAttribute("show-display-count-section", "");
+          .setAttribute("apply-discount", "");
 
           const hidden =
             document.querySelector("pricing-summary-component")
-            .shadowRoot.querySelector("#displayCountSection").hasAttribute("hidden");
+            .shadowRoot.querySelector("#discount").hasAttribute("hidden");
 
           chai.assert(!hidden);
         });
 
-        it("calculates yearly price savings when pricing data is available", ()=>{
-          const pricingData = [
-            {
-              "name": "Unused three year plan",
-              "period": 3,
-              "period_unit": "year",
-              "currency_code": "CAD",
-              "tiers": [
-                {
-                  "starting_unit": 12,
-                  "price": 20790,
-                  "object": "tier"
-                },
-              ]
-            },
-            {
-              "name": "Digital Displays Annual Plan",
-              "period": 1,
-              "period_unit": "year",
-              "currency_code": "USD",
-              "tiers": [
-                {
-                  "starting_unit": 12,
-                  "price": 7700,
-                  "object": "tier"
-                },
-                {
-                  "starting_unit": 4,
-                  "ending_unit": 11,
-                  "price": 8800,
-                  "object": "tier"
-                },
-                {
-                  "starting_unit": 2,
-                  "ending_unit": 3,
-                  "price": 9900,
-                  "object": "tier"
-                },
-                {
-                  "starting_unit": 1,
-                  "ending_unit": 1,
-                  "price": 11000,
-                  "object": "tier"
-                }
-              ]
-            },
-            {
-              "name": "Digital Displays Monthly Plan",
-              "period": 1,
-              "period_unit": "month",
-              "currency_code": "USD",
-              "tiers": [
-                {
-                  "starting_unit": 1,
-                  "ending_unit": 1,
-                  "price": 1000,
-                  "object": "tier"
-                },
-                {
-                  "starting_unit": 2,
-                  "ending_unit": 3,
-                  "price": 900,
-                  "object": "tier"
-                },
-                {
-                  "starting_unit": 4,
-                  "ending_unit": 11,
-                  "price": 800,
-                  "object": "tier"
-                },
-                {
-                  "starting_unit": 12,
-                  "price": 700,
-                  "object": "tier"
-                }
-              ]
-            }
-          ];
+        it("calculates price total when pricing data is available", ()=>{
           document.querySelector("pricing-summary-component")
-          .setAttribute("show-period-section", "");
+          .setAttribute("display-count", 5);
 
           document.querySelector("pricing-summary-component")
           .pricingData = pricingData;
 
-          const savings =
-            document.querySelector("pricing-summary-component").yearlySavings;
+          const priceTotal =
+            document.querySelector("pricing-summary-component").priceTotal;
 
-          chai.assert.equal(savings, "Save $900 every year!");
+          chai.assert.equal(priceTotal, 43999.80);
+        });
+
+        it("includes industry discount in price total when apply-discount attribute is present", ()=>{
+          document.querySelector("pricing-summary-component")
+          .setAttribute("display-count", 5);
+
+          document.querySelector("pricing-summary-component")
+          .setAttribute("apply-discount", "");
+
+          document.querySelector("pricing-summary-component")
+          .pricingData = pricingData;
+
+          const priceTotal =
+            document.querySelector("pricing-summary-component").priceTotal;
+
+          chai.assert.equal(priceTotal, 39599.82);
         });
       });
     </script>
