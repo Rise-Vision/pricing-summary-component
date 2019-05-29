@@ -1,0 +1,160 @@
+<html>
+  <head>
+    <script src="https://unpkg.com/@webcomponents/webcomponentsjs@2.2.10/webcomponents-loader.js"></script>
+    <script type="module" src="pricing-summary-component.mjs"></script>
+    <link rel="stylesheet" href="https://unpkg.com/mocha/mocha.css"></link>
+    <script src="https://unpkg.com/chai/chai.js"></script>
+    <script src="https://unpkg.com/mocha/mocha.js"></script>
+  </head>
+  <body>
+    <div id="component-container">
+    </div>
+
+    <div id="mocha"></div>
+
+    <script class="mocha-init">
+      mocha.setup({
+        globals: [
+          "Polymer",
+          "JSCompiler_renameProperty",
+          "customElements",
+          "HTMLImports"
+        ],
+        ui: "bdd"
+      });
+
+      mocha.checkLeaks();
+    </script>
+    <script>
+      describe("pricing-summary-component", ()=>{
+        beforeEach(()=>{
+          document.getElementById("component-container")
+          .appendChild(document.createElement("pricing-summary-component"));
+          return new Promise(res=>setTimeout(res, 250));
+        });
+
+        afterEach(()=>{
+          document.getElementById("component-container")
+          .removeChild(document.querySelector("#component-container :first-child"));
+        });
+
+        it("exists", ()=>{
+          chai.assert(document.querySelector("pricing-summary-component"));
+        });
+
+        it("does not show display prompt by default", ()=>{
+          const hidden =
+            document.querySelector("pricing-summary-component")
+            .shadowRoot.querySelector("#displayCountSection").hasAttribute("hidden");
+
+          chai.assert(hidden);
+        });
+
+        it("shows display prompt if attribute is set to true", ()=>{
+          document.querySelector("pricing-summary-component")
+          .setAttribute("show-display-count-section", "");
+
+          const hidden =
+            document.querySelector("pricing-summary-component")
+            .shadowRoot.querySelector("#displayCountSection").hasAttribute("hidden");
+
+          chai.assert(!hidden);
+        });
+
+        it("calculates yearly price savings when pricing data is available", ()=>{
+          const pricingData = [
+            {
+              "name": "Unused three year plan",
+              "period": 3,
+              "period_unit": "year",
+              "currency_code": "CAD",
+              "tiers": [
+                {
+                  "starting_unit": 12,
+                  "price": 20790,
+                  "object": "tier"
+                },
+              ]
+            },
+            {
+              "name": "Digital Displays Annual Plan",
+              "period": 1,
+              "period_unit": "year",
+              "currency_code": "USD",
+              "tiers": [
+                {
+                  "starting_unit": 12,
+                  "price": 7700,
+                  "object": "tier"
+                },
+                {
+                  "starting_unit": 4,
+                  "ending_unit": 11,
+                  "price": 8800,
+                  "object": "tier"
+                },
+                {
+                  "starting_unit": 2,
+                  "ending_unit": 3,
+                  "price": 9900,
+                  "object": "tier"
+                },
+                {
+                  "starting_unit": 1,
+                  "ending_unit": 1,
+                  "price": 11000,
+                  "object": "tier"
+                }
+              ]
+            },
+            {
+              "name": "Digital Displays Monthly Plan",
+              "period": 1,
+              "period_unit": "month",
+              "currency_code": "USD",
+              "tiers": [
+                {
+                  "starting_unit": 1,
+                  "ending_unit": 1,
+                  "price": 1000,
+                  "object": "tier"
+                },
+                {
+                  "starting_unit": 2,
+                  "ending_unit": 3,
+                  "price": 900,
+                  "object": "tier"
+                },
+                {
+                  "starting_unit": 4,
+                  "ending_unit": 11,
+                  "price": 800,
+                  "object": "tier"
+                },
+                {
+                  "starting_unit": 12,
+                  "price": 700,
+                  "object": "tier"
+                }
+              ]
+            }
+          ];
+          document.querySelector("pricing-summary-component")
+          .setAttribute("show-period-section", "");
+
+          document.querySelector("pricing-summary-component")
+          .pricingData = pricingData;
+
+          const savings =
+            document.querySelector("pricing-summary-component").yearlySavings;
+
+          chai.assert.equal(savings, "Save $900 every year!");
+        });
+      });
+    </script>
+    <script class="mocha-exec">
+      mocha.run();
+    </script>
+    </script>
+  </body>
+</html>
