@@ -56,7 +56,7 @@ class PricingSummaryComponent extends PolymerElement {
     const pricePennies = this.getTierPricePennies(pricingData, period, displayCount);
     const monthlyPennyPrice = period === "yearly" ? pricePennies / 12 : pricePennies;
 
-    return (monthlyPennyPrice / 100 * displayCount).toFixed(2);
+    return (monthlyPennyPrice / 100).toFixed(2);
   }
 
   getAnnualPrice(pricingData, period, displayCount) {
