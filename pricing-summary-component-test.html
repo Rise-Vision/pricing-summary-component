@@ -166,7 +166,7 @@
           component.setAttribute("period", "monthly");
           component.pricingData = pricingData;
 
-          chai.assert.equal(component.priceTotal, 480.00);
+          chai.assert.equal(component.priceTotal, 40.00);
         });
 
         it("includes industry discount in monthly price total when apply-discount attribute is present", ()=>{
@@ -178,7 +178,7 @@
 
           component.pricingData = pricingData;
 
-          chai.assert.equal(component.priceTotal, 432.00);
+          chai.assert.equal(component.priceTotal, 36.00);
         });
       });
     </script>

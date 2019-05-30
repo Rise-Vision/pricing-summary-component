@@ -9,7 +9,7 @@ class PricingSummaryComponent extends PolymerElement {
       monthText: {type: String, computed: "getMonthText(period)"},
       monthOrYearText: {type: String, computed: "getMonthOrYearText(period)"},
       pricingData: {type: Object, value: {}},
-      priceTotal: {type: Number, computed: "getAnnualPriceWithDiscount(pricingData, applyDiscount, period, displayCount)"},
+      priceTotal: {type: Number, computed: "getPriceWithDiscount(pricingData, applyDiscount, period, displayCount)"},
       pricePerDisplay: {type: Number, computed: "getMonthlyPricePerDisplay(pricingData, period, displayCount)"},
       industryDiscount: {type: Number, computed: "getIndustryDiscount(pricingData, period, displayCount)"}
     };
@@ -66,10 +66,9 @@ class PricingSummaryComponent extends PolymerElement {
     return (annualPricePennies / 100 * displayCount).toFixed(2);
   }
 
-  getAnnualPriceWithDiscount(pricingData, applyDiscount, period, displayCount) {
+  getPriceWithDiscount(pricingData, applyDiscount, period, displayCount) {
     const pricePennies = this.getTierPricePennies(pricingData, period, displayCount);
-    const annualPricePennies = period === "yearly" ? pricePennies : pricePennies * 12;
-    const discountPricePennies = applyDiscount ? annualPricePennies * 0.9 : annualPricePennies;
+    const discountPricePennies = applyDiscount ? pricePennies * 0.9 : pricePennies;
 
     return (discountPricePennies / 100 * displayCount).toFixed(2);
   }
