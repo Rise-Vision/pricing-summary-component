@@ -9,7 +9,7 @@ class PricingSummaryComponent extends PolymerElement {
       monthText: {type: String, computed: "getMonthText(period)"},
       monthOrYearText: {type: String, computed: "getMonthOrYearText(period)"},
       pricingData: {type: Object, value: {}},
-      priceTotal: {type: Number, computed: "getPriceTotal(pricingData, applyDiscount, period, displayCount)"},
+      priceTotal: {type: Number, computed: "getAnnualPriceWithDiscount(pricingData, applyDiscount, period, displayCount)"},
       pricePerDisplay: {type: Number, computed: "getMonthlyPricePerDisplay(pricingData, period, displayCount)"},
       industryDiscount: {type: Number, computed: "getIndustryDiscount(pricingData, period, displayCount)"}
     };
@@ -19,18 +19,13 @@ class PricingSummaryComponent extends PolymerElement {
   getMonthOrYearText(period) {return period === "yearly" ? "year" : "month";}
 
   getIndustryDiscount(pricingData, period, displayCount) {
-    const discount = this.getPrice(pricingData, period, displayCount) * 0.10;
+    const tierPricePennies = this.getTierPricePennies(pricingData, period, displayCount);
+    const annualPricePennies = period === "yearly" ? tierPricePennies : tierPricePennies * 12;
 
-    return discount.toFixed(2);
+    return (annualPricePennies * 0.10 / 100).toFixed(2);
   }
 
-  getPrice(pricingData, period, displayCount) {
-    const monthlyPricePerDisplay = this.getMonthlyPricePerDisplay(pricingData, period, displayCount);
-
-    return monthlyPricePerDisplay * displayCount * (period === "yearly" ? 12 : 1);
-  }
-
-  getMonthlyPricePerDisplay(pricingData, period, displayCount) {
+  getTierPricePennies(pricingData, period, displayCount) {
     if (Object.keys(pricingData).length === 0) {return 0;}
 
     const monthlyPlan = pricingData.filter(plan=>{
@@ -55,15 +50,29 @@ class PricingSummaryComponent extends PolymerElement {
       return tier.starting_unit <= displayCount && upperPrice >= displayCount;
     })[0].price;
 
-    return period === "yearly" ? (yearlyPrice / 12).toFixed(2) : monthlyPrice;
+    return period === "yearly" ? yearlyPrice : monthlyPrice;
   }
 
-  getPriceTotal(pricingData, applyDiscount, period, displayCount) {
-    const price = this.getPrice(pricingData, period, displayCount);
-    const discount = this.getIndustryDiscount(pricingData, period, displayCount);
-    const total = applyDiscount ? price - discount : price;
+  getMonthlyPricePerDisplay(pricingData, period, displayCount) {
+    const pricePennies = this.getTierPricePennies(pricingData, period, displayCount);
+    const monthlyPennyPrice = period === "yearly" ? pricePennies / 12 : pricePennies;
 
-    return total.toFixed(2);
+    return (monthlyPennyPrice / 100 * displayCount).toFixed(2);
+  }
+
+  getAnnualPrice(pricingData, period, displayCount) {
+    const pricePennies = this.getTierPricePennies(pricingData, period, displayCount);
+    const annualPricePennies = period === "yearly" ? pricePennies : pricePennies * 12;
+
+    return (annualPricePennies / 100 * displayCount).toFixed(2);
+  }
+
+  getAnnualPriceWithDiscount(pricingData, applyDiscount, period, displayCount) {
+    const pricePennies = this.getTierPricePennies(pricingData, period, displayCount);
+    const annualPricePennies = period === "yearly" ? pricePennies : pricePennies * 12;
+    const discountPricePennies = applyDiscount ? annualPricePennies * 0.9 : annualPricePennies;
+
+    return (discountPricePennies / 100 * displayCount).toFixed(2);
   }
 
   static get template() {

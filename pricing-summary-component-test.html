@@ -139,33 +139,46 @@
           chai.assert(!hidden);
         });
 
-        it("calculates price total when pricing data is available", ()=>{
-          document.querySelector("pricing-summary-component")
-          .setAttribute("display-count", 5);
+        it("calculates price total when yearly pricing is selected", ()=>{
+          const component = document.querySelector("pricing-summary-component");
 
-          document.querySelector("pricing-summary-component")
-          .pricingData = pricingData;
+          component.setAttribute("display-count", 5);
+          component.setAttribute("period", "yearly");
+          component.pricingData = pricingData;
 
-          const priceTotal =
-            document.querySelector("pricing-summary-component").priceTotal;
-
-          chai.assert.equal(priceTotal, 43999.80);
+          chai.assert.equal(component.priceTotal, 440.00);
         });
 
-        it("includes industry discount in price total when apply-discount attribute is present", ()=>{
-          document.querySelector("pricing-summary-component")
-          .setAttribute("display-count", 5);
+        it("includes industry discount in yearly price total when apply-discount attribute is present", ()=>{
+          const component = document.querySelector("pricing-summary-component");
 
-          document.querySelector("pricing-summary-component")
-          .setAttribute("apply-discount", "");
+          component.setAttribute("display-count", 5);
+          component.setAttribute("apply-discount", "");
+          component.pricingData = pricingData;
 
-          document.querySelector("pricing-summary-component")
-          .pricingData = pricingData;
+          chai.assert.equal(component.priceTotal, 396.00);
+        });
 
-          const priceTotal =
-            document.querySelector("pricing-summary-component").priceTotal;
+        it("calculates price total when monthly pricing is selected", ()=>{
+          const component = document.querySelector("pricing-summary-component");
 
-          chai.assert.equal(priceTotal, 39599.82);
+          component.setAttribute("display-count", 5);
+          component.setAttribute("period", "monthly");
+          component.pricingData = pricingData;
+
+          chai.assert.equal(component.priceTotal, 480.00);
+        });
+
+        it("includes industry discount in monthly price total when apply-discount attribute is present", ()=>{
+          const component = document.querySelector("pricing-summary-component");
+
+          component.setAttribute("display-count", 5);
+          component.setAttribute("period", "monthly");
+          component.setAttribute("apply-discount", "");
+
+          component.pricingData = pricingData;
+
+          chai.assert.equal(component.priceTotal, 432.00);
         });
       });
     </script>
