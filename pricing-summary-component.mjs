@@ -21,7 +21,7 @@ class PricingSummaryComponent extends PolymerElement {
   getIndustryDiscount(pricingData, period, displayCount) {
     const tierPricePennies = this.getTierPricePennies(pricingData, period, displayCount);
 
-    return (tierPricePennies * 0.10 / 100).toFixed(2);
+    return (tierPricePennies * displayCount * 0.10 / 100).toFixed(2);
   }
 
   getTierPricePennies(pricingData, period, displayCount) {
