@@ -83,6 +83,7 @@ class PricingSummaryComponent extends PolymerElement {
           background-color: #fcf5bf;
           font-style: italic;
           color: #3dbd51;
+          font-weight: bold;
         }
       </style>
       <section>
