@@ -25,7 +25,7 @@ class PricingSummaryComponent extends PolymerElement {
   }
 
   getTierPricePennies(pricingData, period, displayCount) {
-    if (Object.keys(pricingData).length === 0) {return 0;}
+    if (!pricingData || pricingData.failed || Object.keys(pricingData).length === 0) {return 0;}
 
     const monthlyPlan = pricingData.filter(plan=>{
       return plan.period === 1 && plan.period_unit === "month" && plan.currency_code === "USD";
