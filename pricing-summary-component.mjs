@@ -15,7 +15,7 @@ class PricingSummaryComponent extends PolymerElement {
     };
   }
 
-  getMonthText(period) {return period === "yearly" ? "12 months" : "1 month";}
+  getMonthText(period) {return period === "yearly" ? " x 12 months" : "";}
   getMonthOrYearText(period) {return period === "yearly" ? "year" : "month";}
 
   getIndustryDiscount(pricingData, period, displayCount) {
@@ -88,7 +88,7 @@ class PricingSummaryComponent extends PolymerElement {
       </style>
       <section>
         <div id="summary">
-          [[displayCount]] Displays x $[[pricePerDisplay]] x [[monthText]]
+          [[displayCount]] Displays x $[[pricePerDisplay]][[monthText]]
         </div>
         <div id="discount" hidden=[[!applyDiscount]]>
           <span>- $[[industryDiscount]] per [[monthOrYearText]] Education and Non-Profit Discount</span>
