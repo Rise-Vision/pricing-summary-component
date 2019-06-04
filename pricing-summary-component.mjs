@@ -73,6 +73,10 @@ class PricingSummaryComponent extends PolymerElement {
     return (discountPricePennies / 100 * displayCount).toFixed(2);
   }
 
+  pluralDisplays(displayCount) {
+    return displayCount > 1 ? "s" : "";
+  }
+
   static get template() {
     return html`
       <style>
@@ -88,7 +92,7 @@ class PricingSummaryComponent extends PolymerElement {
       </style>
       <section>
         <div id="summary">
-          [[displayCount]] Displays x $[[pricePerDisplay]][[monthText]]
+          [[displayCount]] Display[[pluralDisplays(displayCount)]] x $[[pricePerDisplay]][[monthText]]
         </div>
         <div id="discount" hidden=[[!applyDiscount]]>
           <span>- $[[industryDiscount]] per [[monthOrYearText]] Education and Non-Profit Discount</span>
