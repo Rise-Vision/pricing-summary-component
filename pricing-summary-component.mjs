@@ -80,9 +80,9 @@ class PricingSummaryComponent extends PolymerElement {
           text-align: center;
         }
         #discount span{
-          background-color: #fcf5bf;
-          font-style: italic;
           color: #3dbd51;
+        }
+        #total {
           font-weight: bold;
         }
       </style>
