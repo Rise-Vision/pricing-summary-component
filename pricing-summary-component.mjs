@@ -77,13 +77,23 @@ class PricingSummaryComponent extends PolymerElement {
     return displayCount > 1 ? "s" : "";
   }
 
+  inlineOrBlock(applyDiscount) {
+    return applyDiscount ? "block" : "inline";
+  }
+
   static get template() {
     return html`
       <style>
         section {
           text-align: center;
         }
-        #discount span{
+        .inline {
+          display: inline;
+        }
+        .block {
+          display: block;
+        }
+        #discount {
           color: #3dbd51;
         }
         #total {
@@ -91,13 +101,13 @@ class PricingSummaryComponent extends PolymerElement {
         }
       </style>
       <section>
-        <div id="summary">
+        <div id="summary" class$=[[inlineOrBlock(applyDiscount)]]>
           [[displayCount]] Display[[pluralDisplays(displayCount)]] x $[[pricePerDisplay]][[monthText]]
         </div>
         <div id="discount" hidden=[[!applyDiscount]]>
-          <span>- $[[industryDiscount]] per [[monthOrYearText]] Education and Non-Profit Discount</span>
+          - $[[industryDiscount]] per [[monthOrYearText]] Education and Non-Profit Discount
         </div>
-        <div id="total">= $[[priceTotal]] per [[monthOrYearText]]</div>
+        <div id="total" class$=[[inlineOrBlock(applyDiscount)]]>= $[[priceTotal]] per [[monthOrYearText]]</div>
       </section>
     `;
   }
