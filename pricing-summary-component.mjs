@@ -9,7 +9,7 @@ class PricingSummaryComponent extends PolymerElement {
       monthText: {type: String, computed: "getMonthText(period)"},
       monthOrYearText: {type: String, computed: "getMonthOrYearText(period)"},
       pricingData: {type: Object, value: {}},
-      priceTotal: {type: Number, computed: "getPriceWithDiscount(pricingData, applyDiscount, period, displayCount)"},
+      priceTotal: {type: Number, notify: true, computed: "getPriceWithDiscount(pricingData, applyDiscount, period, displayCount)"},
       pricePerDisplay: {type: Number, computed: "getMonthlyPricePerDisplay(pricingData, period, displayCount)"},
       industryDiscount: {type: Number, computed: "getIndustryDiscount(pricingData, period, displayCount)"}
     };
