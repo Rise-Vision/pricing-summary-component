@@ -9,9 +9,9 @@ class PricingSummaryComponent extends PolymerElement {
       monthText: {type: String, computed: "getMonthText(period)"},
       monthOrYearText: {type: String, computed: "getMonthOrYearText(period)"},
       pricingData: {type: Object, value: {}},
-      priceTotal: {type: Number, notify: true, computed: "getPriceWithDiscount(pricingData, applyDiscount, period, displayCount)"},
+      priceTotal: {type: String, notify: true, computed: "getPriceWithDiscount(pricingData, applyDiscount, period, displayCount)"},
       pricePerDisplay: {type: Number, computed: "getMonthlyPricePerDisplay(pricingData, period, displayCount)"},
-      industryDiscount: {type: Number, computed: "getIndustryDiscount(pricingData, period, displayCount)"}
+      industryDiscount: {type: String, computed: "getIndustryDiscount(pricingData, period, displayCount)"}
     };
   }
 
@@ -21,7 +21,7 @@ class PricingSummaryComponent extends PolymerElement {
   getIndustryDiscount(pricingData, period, displayCount) {
     const tierPricePennies = this.getTierPricePennies(pricingData, period, displayCount);
 
-    return (tierPricePennies * displayCount * 0.10 / 100).toFixed(2);
+    return this.withCommaSep((tierPricePennies * displayCount * 0.10 / 100).toFixed(2));
   }
 
   getTierPricePennies(pricingData, period, displayCount) {
@@ -71,7 +71,11 @@ class PricingSummaryComponent extends PolymerElement {
     const pricePennies = this.getTierPricePennies(pricingData, period, displayCount);
     const discountPricePennies = applyDiscount ? pricePennies * 0.9 : pricePennies;
 
-    return (discountPricePennies / 100 * displayCount).toFixed(2);
+    return this.withCommaSep((discountPricePennies / 100 * displayCount).toFixed(2));
+  }
+
+  withCommaSep(stringVal) {
+    return Number(stringVal).toLocaleString();
   }
 
   pluralDisplays(displayCount) {
