@@ -1,4 +1,4 @@
-import {PolymerElement, html} from "https://unpkg.com/@polymer/polymer@next/polymer-element.js?module"
+import {PolymerElement, html} from "https://unpkg.com/@polymer/polymer@3.2.0/polymer-element.js?module"
 
 class PricingSummaryComponent extends PolymerElement {
   static get properties() {
