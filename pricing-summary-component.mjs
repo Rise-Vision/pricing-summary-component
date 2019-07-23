@@ -91,6 +91,7 @@ class PricingSummaryComponent extends PolymerElement {
       <style>
         section {
           text-align: center;
+          border-radius: 4px;
         }
         .inline {
           display: inline;
